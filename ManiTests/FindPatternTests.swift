@@ -372,11 +372,21 @@ struct FindControllerTests {
     /// Half-typed regular expressions are the normal case, not an error state.
     @Test func recoversFromAHalfTypedPattern() {
         let controller = controller("a b a", pattern("(", .regex))
-        #expect(!controller.isPatternValid)
+        #expect(controller.problem == "Bad pattern")
         #expect(controller.matches.isEmpty)
         controller.pattern = pattern("(a)", .regex)
         controller.refresh(in: "a b a")
-        #expect(controller.isPatternValid)
+        #expect(controller.problem == nil)
         #expect(controller.status == "1 of 2")
+    }
+
+    /// Catastrophic backtracking gives up within the budget instead of
+    /// freezing the main actor, and says so.
+    @Test func givesUpOnCatastrophicBacktracking() {
+        let start = Date.now
+        let controller = controller(String(repeating: "a", count: 40), pattern("(a+)+b", .regex))
+        #expect(Date.now.timeIntervalSince(start) < FindPattern.timeBudget + 1)
+        #expect(controller.status == "Too slow")
+        #expect(controller.matches.isEmpty)
     }
 }

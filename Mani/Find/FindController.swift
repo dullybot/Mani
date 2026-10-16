@@ -11,12 +11,13 @@ import Observation
 final class FindController {
     var pattern = FindPattern()
     private(set) var matches: [NSRange] = []
-    private(set) var isPatternValid = true
+    /// Why the pattern found nothing, when the answer is not "no matches".
+    private(set) var problem: String?
     private(set) var current = 0
 
     var status: String {
         if pattern.text.isEmpty { return "" }
-        if !isPatternValid { return "Bad pattern" }
+        if let problem { return problem }
         return matches.isEmpty ? "No matches" : "\(current + 1) of \(matches.count)"
     }
 
@@ -25,10 +26,13 @@ final class FindController {
     func refresh(in text: String) {
         do {
             matches = try pattern.ranges(in: text)
-            isPatternValid = true
+            problem = nil
+        } catch is FindPattern.TooSlow {
+            matches = []
+            problem = "Too slow"
         } catch {
             matches = []
-            isPatternValid = false
+            problem = "Bad pattern"
         }
         current = min(current, max(matches.count - 1, 0))
     }

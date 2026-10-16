@@ -44,7 +44,7 @@ struct FindBar<Actions: View>: View {
                 .help("Match whole words only")
             Text(controller.status)
                 .font(.callout)
-                .foregroundStyle(controller.isPatternValid ? Color.secondary : Color.red)
+                .foregroundStyle(controller.problem == nil ? Color.secondary : Color.red)
                 .monospacedDigit()
             Spacer(minLength: 0)
             stepper
