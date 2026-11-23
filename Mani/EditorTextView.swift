@@ -119,10 +119,14 @@ final class EditorController {
         if let current {
             paint(current, .systemRed, .white)
         }
-        // Neither removing nor adding a rendering attribute repaints fragments
-        // already on screen — without this, a new highlight only shows once
-        // something else forces a redraw, such as stepping scrolling the view.
-        textView.needsDisplay = true
+        // Rendering attributes don't repaint fragments already on screen, and
+        // those fragments draw in their own subviews, so the text view's
+        // `needsDisplay` misses them: relaying out the viewport redraws them.
+        let viewport = layout.textViewportLayoutController
+        if let range = viewport.viewportRange {
+            layout.invalidateLayout(for: range)
+        }
+        viewport.layoutViewport()
     }
 }
 
