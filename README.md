@@ -12,6 +12,8 @@ The bottom bar holds three menus, split by what you are trying to do.
 
 **Organize** rewrites the text as structured Markdown using the on-device Apple Intelligence model. It requires Apple Intelligence to be enabled, and nothing leaves the machine.
 
+Press ⇧⌘S to open the strip bar: type a string or regular expression, watch every hit highlight, then remove the current one with Return or all of them with Strip All, as one undo step.
+
 Press ⇧⌘P, or Edit > Search Commands, to open the command palette. Type to filter: your letters have to appear in the command's name in order, but not next to each other, so `fjsk` finds Format JSON (Sort Keys). Arrows or ⌃N and ⌃P move, Page Up and Page Down move by eight, Home and End jump to the ends, Return runs, Escape closes.
 
 The app guesses what the text is, judging the selection when there is one, and offers only the commands that fit it. With JSON on screen the XML formatters grey out, and Decode JWT is offered only for something shaped like a token. The guess is a heuristic, so it defers: anything it cannot identify, including ordinary prose, leaves every command available.
